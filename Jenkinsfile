@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     // Build Docker image
-                    bat 'docker build -t arivanan2001/income-expense.jar .'
+                    bat 'docker build -t arivanan2001/income-expense .'
                 }
             }
         }
