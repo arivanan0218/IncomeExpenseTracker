@@ -31,7 +31,7 @@ pipeline {
                         bat 'echo %dockerhubpwd% | docker login -u arivanan2001 --password-stdin'
 
                         // Push the Docker image to Docker Hub
-                        bat 'docker push arivanan2001/income-expense.jar'
+                        bat 'docker push arivanan2001/income-expense'
                     }
                 }
             }
