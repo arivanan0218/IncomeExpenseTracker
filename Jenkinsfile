@@ -48,6 +48,73 @@
 //     }
 // }
 
+//////////////////
+//
+// pipeline {
+//     agent any
+//     tools {
+//         maven 'maven_3_9_9'
+//     }
+//     environment {
+//         IMAGE_NAME = 'arivanan2001/income-expense'
+//         DOCKER_CREDENTIALS_ID = 'dockerhubpwd'
+//         KUBECONFIG_CREDENTIALS_ID = 'k8pwd'
+//     }
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 checkout scmGit(branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/arivanan0218/IncomeExpenseTracker']])
+//             }
+//         }
+//
+//         stage('Build Maven') {
+//             steps {
+//                 bat 'mvn clean install'
+//             }
+//         }
+//
+//         stage('Unit Tests') {
+//             steps {
+//                 bat 'mvn test'
+//             }
+//         }
+//
+// //         stage('Security Scan') {
+// //             steps {
+// //                 bat 'mvn org.owasp:dependency-check-maven:check'
+// //             }
+// //         }
+//
+//         stage('Build Docker Image') {
+//             steps {
+//                 script {
+//                     bat "docker build -t ${IMAGE_NAME} ."
+//                 }
+//             }
+//         }
+//
+//         stage('Push Image to Docker Hub') {
+//             steps {
+//                 script {
+//                     withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID, variable: 'dockerhubpwd')]) {
+//                         bat 'echo %dockerhubpwd% | docker login -u arivanan2001 --password-stdin'
+//                         bat "docker push ${IMAGE_NAME}"
+//                         bat 'docker logout'
+//                     }
+//                 }
+//             }
+//         }
+//
+//         stage('Deploy to Kubernetes') {
+//             steps {
+//                 script {
+//                     kubernetesDeploy(configs: 'deploymentservice.yaml', kubeconfigId: KUBECONFIG_CREDENTIALS_ID)
+//                 }
+//             }
+//         }
+//     }
+// }
+
 
 pipeline {
     agent any
@@ -66,6 +133,12 @@ pipeline {
             }
         }
 
+        stage('Code Quality Analysis') {
+            steps {
+                bat 'mvn sonar:sonar -Dsonar.projectKey=income-expense -Dsonar.host.url=http://your-sonarqube-url'
+            }
+        }
+
         stage('Build Maven') {
             steps {
                 bat 'mvn clean install'
@@ -78,11 +151,35 @@ pipeline {
             }
         }
 
-//         stage('Security Scan') {
-//             steps {
-//                 bat 'mvn org.owasp:dependency-check-maven:check'
-//             }
-//         }
+        stage('Integration Tests') {
+            steps {
+                bat 'mvn verify'
+            }
+        }
+
+        stage('Performance Tests') {
+            steps {
+                bat 'jmeter -n -t performance-test.jmx'
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                bat 'mvn org.owasp:dependency-check-maven:check'
+            }
+        }
+
+        stage('Regression Tests') {
+            steps {
+                bat 'mvn test -Dtest=UITests'
+            }
+        }
+
+        stage('Chaos Testing') {
+            steps {
+                bat 'kubectl apply -f chaos-experiments.yaml'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -110,6 +207,11 @@ pipeline {
                     kubernetesDeploy(configs: 'deploymentservice.yaml', kubeconfigId: KUBECONFIG_CREDENTIALS_ID)
                 }
             }
+        }
+    }
+    post {
+        failure {
+            mail to: 'arivuarivanan7@gmail.com', subject: 'Jenkins Pipeline Failed', body: 'Check the Jenkins logs for details.'
         }
     }
 }
