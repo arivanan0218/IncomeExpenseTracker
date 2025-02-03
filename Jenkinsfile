@@ -33,6 +33,7 @@ pipeline {
                         // Push the Docker image to Docker Hub
                         bat 'docker push arivanan2001/income-expense'
                     }
+                     bat 'docker logout'
                 }
             }
         }
