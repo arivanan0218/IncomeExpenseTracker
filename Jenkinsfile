@@ -7,7 +7,7 @@ pipeline {
         stage('Build Maven') {
             steps {
                 // Checkout code from GitHub repository
-                checkout scmGit(branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/arivanan0218/IncomeExpenseTracker.git']])
+                checkout scmGit(branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/arivanan0218/IncomeExpenseTracker']])
 
                 // Run Maven clean install
                 bat 'mvn clean install'
