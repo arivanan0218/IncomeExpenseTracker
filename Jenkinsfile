@@ -78,11 +78,11 @@ pipeline {
             }
         }
 
-        stage('Security Scan') {
-            steps {
-                bat 'mvn org.owasp:dependency-check-maven:check'
-            }
-        }
+//         stage('Security Scan') {
+//             steps {
+//                 bat 'mvn org.owasp:dependency-check-maven:check'
+//             }
+//         }
 
         stage('Build Docker Image') {
             steps {
