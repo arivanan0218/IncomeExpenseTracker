@@ -14,7 +14,7 @@ public class HelloWorldController {
     }
 
     @GetMapping("/hello-ari")
-    public void sayHello1() {
+    public String sayHello1() {
         return "Hello, Arivu!";
     }
 }
