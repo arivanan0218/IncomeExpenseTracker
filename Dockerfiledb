@@ -1,9 +1,0 @@
-FROM postgres:latest
-
-# Set environment variables for your database
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=Arivu2001@
-ENV POSTGRES_DB=income_expense_tracker
-
-# Expose the port PostgreSQL will run on
-EXPOSE 5432
