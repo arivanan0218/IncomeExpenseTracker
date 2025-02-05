@@ -1,10 +1,47 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: springboot-k8s-income-expense-deployment
+#spec:
+#  replicas: 2
+#  selector:  # Add the selector field to match the template labels
+#    matchLabels:
+#      app: springboot-k8s-income-expense
+#  template:
+#    metadata:
+#      labels:
+#        app: springboot-k8s-income-expense
+#    spec:
+#      containers:
+#        - name: springboot-k8s-income-expense
+#          image: arivanan2001/income-expense
+#          imagePullPolicy: IfNotPresent
+#          ports:
+#            - containerPort: 8080
+#
+#---
+#
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: springboot-k8s-income-expense-svc
+#spec:
+#  selector:
+#    app: springboot-k8s-income-expense
+#  ports:
+#    - protocol: TCP
+#      port: 8080
+#      targetPort: 8080
+#  type: NodePort
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: springboot-k8s-income-expense-deployment
 spec:
   replicas: 2
-  selector:  # Add the selector field to match the template labels
+  selector:
     matchLabels:
       app: springboot-k8s-income-expense
   template:
@@ -18,9 +55,21 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://postgres-service:5432/income_expense_tracker"  # PostgreSQL service in Kubernetes
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "postgres"  # Match with PostgreSQL credentials
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "Arivu2001@"  # Match with PostgreSQL credentials
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              value: "org.postgresql.Driver"
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"  # Hibernate setting for auto schema updates
+            - name: SPRING_JPA_DATABASE_PLATFORM
+              value: "org.hibernate.dialect.PostgreSQLDialect"
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -32,4 +81,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: NodePort
+  type: LoadBalancer  # Change to LoadBalancer for external access

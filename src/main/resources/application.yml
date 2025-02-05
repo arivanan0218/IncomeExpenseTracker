@@ -1,14 +1,38 @@
+#server:
+#  address: 0.0.0.0
+#
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/income_expense_tracker
+#    username: postgres
+#    password: Arivu2001@
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: update
+
+
 server:
   address: 0.0.0.0
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/income_expense_tracker
-    username: postgres
-    password: Arivu2001@
+    url: jdbc:postgresql://postgres-service:5432/income_expense_tracker  # Use Kubernetes service name for internal access
+    username: postgres  # Update with the correct PostgreSQL username
+    password: Arivu2001@  # Update with the correct PostgreSQL password
+    driver-class-name: org.postgresql.Driver
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: update  # Automatically create/update database schema
+  sql:
+    init:
+      mode: always  # Ensures Spring Boot initializes DB on startup
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG  # Enable SQL query logging for debugging
