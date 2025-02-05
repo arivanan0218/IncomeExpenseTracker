@@ -46,4 +46,21 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            emailext (
+                to: 'arivuarivanan7@gmail.com, vamathevanarivanan@gmail.com',
+                subject: 'Jenkins Build SUCCESS - IncomeExpenseTracker',
+                body: 'The Jenkins pipeline for IncomeExpenseTracker has completed successfully.'
+            )
+        }
+        failure {
+            emailext (
+                to: 'arivuarivanan7@gmail.com, vamathevanarivanan@gmail.com',
+                subject: 'Jenkins Build FAILED - IncomeExpenseTracker',
+                body: 'The Jenkins pipeline for IncomeExpenseTracker has failed. Please check the logs in Jenkins.'
+            )
+        }
+    }
 }
