@@ -38,15 +38,6 @@ pipeline {
             }
         }
 
-        stage('Deploy PostgreSQL in k8s') {
-                    steps {
-                        script {
-                            bat 'kubectl apply -f postgres-deployment.yaml'
-                            bat 'timeout /t 30'  // Wait for DB to start
-                        }
-                    }
-                }
-
         stage ('Deploy to k8s'){
             steps{
                 script{
