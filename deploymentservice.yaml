@@ -1,10 +1,47 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: springboot-k8s-income-expense-deployment
+#spec:
+#  replicas: 2
+#  selector:  # Add the selector field to match the template labels
+#    matchLabels:
+#      app: springboot-k8s-income-expense
+#  template:
+#    metadata:
+#      labels:
+#        app: springboot-k8s-income-expense
+#    spec:
+#      containers:
+#        - name: springboot-k8s-income-expense
+#          image: arivanan2001/income-expense
+#          imagePullPolicy: IfNotPresent
+#          ports:
+#            - containerPort: 8080
+#
+#---
+#
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: springboot-k8s-income-expense-svc
+#spec:
+#  selector:
+#    app: springboot-k8s-income-expense
+#  ports:
+#    - protocol: TCP
+#      port: 8080
+#      targetPort: 8080
+#  type: NodePort
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: springboot-k8s-income-expense-deployment
 spec:
   replicas: 2
-  selector:  # Add the selector field to match the template labels
+  selector:
     matchLabels:
       app: springboot-k8s-income-expense
   template:
@@ -14,10 +51,51 @@ spec:
     spec:
       containers:
         - name: springboot-k8s-income-expense
-          image: arivanan2001/income-expense
+          image: arivanan2001/income-expense:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: postgres-db
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: income_expense_tracker
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: Arivu2001@
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-db
+  template:
+    metadata:
+      labels:
+        app: postgres-db
+    spec:
+      containers:
+        - name: postgres-db
+          image: arivanan2001/postgres-db:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: Arivu2001@
+            - name: POSTGRES_DB
+              value: income_expense_tracker
 
 ---
 
@@ -33,3 +111,18 @@ spec:
       port: 8080
       targetPort: 8080
   type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-db-svc
+spec:
+  selector:
+    app: postgres-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP

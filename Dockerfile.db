@@ -1,0 +1,10 @@
+# Use the official PostgreSQL image as the base
+FROM postgres:latest
+
+# Set environment variables for database configuration
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=Arivu2001@
+ENV POSTGRES_DB=income_expense_tracker
+
+# Expose the PostgreSQL default port
+EXPOSE 5432

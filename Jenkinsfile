@@ -23,6 +23,15 @@ pipeline {
             }
         }
 
+        stage('Build PostgreSQL Docker image') {
+            steps {
+                script {
+                    // Build PostgreSQL Docker image (if you have a custom Dockerfile for PostgreSQL)
+                    bat 'docker build -t arivanan2001/postgres-db ./postgres'
+                }
+            }
+        }
+
         stage('Push images to Hub') {
             steps {
                 script {
@@ -32,6 +41,9 @@ pipeline {
 
                         // Push the Docker image to Docker Hub
                         bat 'docker push arivanan2001/income-expense'
+
+                        // Push the PostgreSQL Docker image to Docker Hub
+                        bat 'docker push arivanan2001/postgres-db'
                     }
                      bat 'docker logout'
                 }
