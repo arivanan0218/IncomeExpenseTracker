@@ -1,0 +1,14 @@
+server:
+  address: 0.0.0.0
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/income_expense_tracker
+    username: postgres
+    password: Arivu2001@
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
