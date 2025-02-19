@@ -39,7 +39,7 @@ pipeline {
             }
         }
 
-        stage ('Deploy to k8s'){
+        stage ('Deploy to k8ss'){
             steps{
                 script{
                     kubernetesDeploy (configs: 'deploymentservice.yaml', kubeconfigId: 'k8s')
