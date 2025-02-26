@@ -104,14 +104,7 @@ pipeline {
             }
         }
 
-//         stage('Provision Infrastructure with Terraform') {
-//             steps {
-//                 script {
-//                     bat 'terraform init'
-//                     bat 'terraform apply -auto-approve'
-//                 }
-//             }
-//         }
+
 
 //         stage('Configure Environment with Ansible') {
 //             steps {
