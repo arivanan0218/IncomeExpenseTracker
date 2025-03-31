@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    image: arivanan/myapp-backend:latest
+    container_name: myapp-backend
+    ports:
+      - "${SERVER_PORT:-8081}:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - myapp-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:latest
+    container_name: myapp-postgres
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_DB=expense_tracker
+      - POSTGRES_USER=postgres  # Add this
+      - POSTGRES_PASSWORD=Arivu2001@  # Add this
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - myapp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+
+networks:
+  myapp-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    name: myapp-postgres-data
