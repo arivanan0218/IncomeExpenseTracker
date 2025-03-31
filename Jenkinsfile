@@ -185,8 +185,8 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "ls -la ~/app-deployment/"
 
                             # Copy main config files
-                            echo "Copying docker-compose.yml and .env..."
-                            scp -o StrictHostKeyChecking=no docker-compose.yml .env $REMOTE_USER@$REMOTE_HOST:~/app-deployment/
+                            echo "Copying docker-compose.yml"
+                            scp -o StrictHostKeyChecking=no docker-compose.yml $REMOTE_USER@$REMOTE_HOST:~/app-deployment/
 
                             # Deploy the application
                             echo "Deploying application..."
