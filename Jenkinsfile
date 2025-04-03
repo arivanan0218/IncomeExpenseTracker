@@ -9,7 +9,7 @@ pipeline {
     parameters {
         choice(name: 'DEPLOY_ENV', choices: ['staging', 'production'], description: 'Select deployment environment')
         string(name: 'SERVER_PORT', defaultValue: '8081', description: 'Port for the application to run on EC2')
-        string(name: 'MYSQL_PORT', defaultValue: '3306', description: 'Port for MySQL to run on EC2')
+        string(name: 'POSTGRESQL_PORT', defaultValue: '3306', description: 'Port for MySQL to run on EC2')
     }
 
     environment {
